@@ -41,11 +41,9 @@ values."
      ;; ----------------------------------------------------------------
      helm
      docker
-     make
      auto-completion
      better-defaults
      emacs-lisp
-     hg
      git
      markdown
      org
@@ -65,12 +63,13 @@ values."
      docker
      colors
      themes-megapack
+     osx
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(olivetti)
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -126,7 +125,8 @@ values."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   ;; dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner nil
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
    ;; Possible values for list-type are:
@@ -142,16 +142,20 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(monokai
-                         spacemacs-dark
-                         spacemacs-light)
+   ;; dotspacemacs-themes '(monokai
+   ;;                       spacemacs-dark
+   ;;                       spacemacs-light)
+   dotspacemacs-themes '(doom-molokai
+                         cyberpunk
+                         gotham
+                         spacemacs-dark)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 13
-                               :weight normal
+                               :size 20
+                               :weight light
                                :width normal
                                :powerline-scale 1.1)
    ;; The leader key
@@ -317,6 +321,7 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+
   )
 
 (defun dotspacemacs/user-config ()
@@ -326,7 +331,235 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+
+  (setq org-startup-indented t)
+  (setq org-use-speed-commands t)
+
+
+  ;; Many lines in the following taken from
+  ;; https://github.com/frankjonen/emacs-for-writers/blob/master/.spacemacs
+
+  ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  ;; Spellcheck Setup
+
+  (with-eval-after-load "ispell"
+    (setq ispell-program-name "aspell")
+    (ispell-set-spellchecker-params)
+    (setq ispell-dictionary "en_GB"))
+
+
   )
+
+
+
+
+
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; Terminal Environment
+
+(defun my-shell-setup ()
+	(interactive)
+	(setq buffer-face-mode-face '(:family "PxPlus IBM VGA8" :height 160))
+	(buffer-face-mode))
+(add-hook 'term-mode-hook #'my-shell-setup)
+
+
+
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; Image Environment
+
+(defun set-image-borderless ()
+	(setq left-margin-width 0)
+	(setq right-margin-width 0)
+	(set-fringe-mode 0)
+	(setq global-hl-line-mode nil)
+	(image-transform-fit-to-height))
+(add-hook 'image-mode-hook #'set-image-borderless)
+
+
+
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+(defun my-toggle-margins-low ()
+"Set margins in current buffer for use in narrow windows."
+(interactive)
+  (if (or (> left-margin-width 0) (> right-margin-width 0))
+    (progn
+      (setq left-margin-width 0)
+      (setq right-margin-width 0)
+      (set-fringe-mode nil)
+      (setq global-hl-line-mode t)
+      (set-window-buffer (selected-window) (current-buffer)))
+    (setq left-margin-width 5)
+    (setq right-margin-width 5)
+    (set-fringe-mode 0)
+    (setq global-hl-line-mode nil)
+    (set-window-buffer (selected-window) (current-buffer))))
+
+(global-set-key [f5] #'my-toggle-margins-low)
+
+
+(defun my-toggle-margins-wide ()
+"Set margins in current buffer for use in full-screen."
+(interactive)
+  (if (or (> left-margin-width 0) (> right-margin-width 0))
+    (progn
+      (setq left-margin-width 0)
+      (setq right-margin-width 0)
+      (set-fringe-mode nil)
+      (setq global-hl-line-mode t)
+      (set-window-buffer (selected-window) (current-buffer)))
+    (setq left-margin-width 80)
+    (setq right-margin-width 80)
+    (set-fringe-mode 0)
+    (setq global-hl-line-mode nil)
+    (set-window-buffer (selected-window) (current-buffer))))
+
+(global-set-key [f8] #'my-toggle-margins-wide)
+
+
+
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; Projectile
+
+(setq projectile-completion-system 'ivy)
+(setq projectile-ignore-global '(".DS_Store" ".gitmodules" ".gitignore"))
+;(setq projectile-project-search-path '("~/work/"))
+
+
+
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; Markdown
+
+(defun markdown-setup ()
+	(interactive)
+	(visual-line-mode 1)
+	;; (setq buffer-face-mode-face '(:family "iA Writer Quattro S" :height 200 :foreground "#aba7a0"))
+  (setq buffer-face-mode-face '(:family "iA Writer Mono S" :height 180 ))
+	(buffer-face-mode)
+	(setq line-spacing 3)
+	(setq left-margin-width 8)
+	(setq right-margin-width 8)
+	(flyspell-mode 1)
+	(setq global-hl-line-mode nil)
+	(setq header-line-format " "))
+(add-hook 'markdown-mode-hook #'markdown-setup)
+(add-hook 'markdown-mode-hook 'prettify-symbols-mode)
+(add-hook 'markdown-mode-hook 'fixed-pitch-mode)
+
+
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; Org-Mode
+
+(defun split-and-indirect-orgtree ()
+"Splits window to the right and opens an org tree section in it"
+(interactive)
+(split-window-right)
+(org-tree-to-indirect-buffer)
+(windmove-right))
+
+
+(defun kill-and-unsplit-orgtree ()
+"Kills the cloned buffer and deletes the window."
+(interactive)
+(kill-this-buffer)
+(delete-window))
+
+
+(with-eval-after-load 'org
+	;(setq org-agenda-files '("~/Org/Notes/"
+	;                         "~/Org/Agenda/"))
+	;(setq org-default-notes-file "~/Org/Notes/notes.org")
+	(setq org-ellipsis "⤵")
+	(setq org-catch-invisible-edits 'show-and-error)
+	(setq org-hide-emphasis-markers t)
+	(setq org-fontify-whole-heading-line t)
+	(setq org-tags-column 0)
+	(setq org-bullets-bullet-list '("⬢" "◆" "▲" "■"))
+	(setq org-adapt-indentation t)
+	(setq line-move-visual t)
+	; Change Default Keymaps
+	(define-key org-mode-map (kbd "C-S-<return>") 'org-insert-subheading)
+	; Shortcuts to Interactive Functions
+	(define-key org-mode-map [f9]  #'split-and-indirect-orgtree)
+	(define-key org-mode-map [f12] #'kill-and-unsplit-orgtree)
+	(define-key org-mode-map [f7]  #'org-html-export-to-html))
+
+
+; Things we can't set as defaults above, we can set here
+(defun org-setup ()
+	(setq line-spacing 3)
+	(flyspell-mode 1)
+	(setq global-hl-line-mode nil)
+	(set-fringe-mode 0)
+	(setq left-margin-width 5)
+	(setq right-margin-width 5)
+	(setq header-line-format " ")
+	(olivetti-mode 1))
+(add-hook 'org-mode-hook #'org-setup)
+
+;; The Hooks! Might be faster to set this as separate hooks instead of one big function
+;; (add-hook 'org-mode-hook 'variable-pitch-mode)
+(add-hook 'org-mode-hook 'fixed-pitch-mode)
+(add-hook 'org-mode-hook 'visual-line-mode)
+(add-hook 'org-mode-hook 'org-indent-mode)
+(add-hook 'org-mode-hook 'prettify-symbols-mode)
+
+
+(defun my-org-config/setup-buffer-face ()
+	(setq buffer-face-mode-face '(:family "iA Writer Mono S"))
+	(buffer-face-mode)
+)
+(add-hook 'org-agenda-mode-hook 'my-org-config/setup-buffer-face)
+
+(custom-theme-set-faces
+	'user
+	'(variable-pitch ((t (:family "iA Writer Mono S" :height 200 :foreground "#a5967e"))))
+	'(fixed-pitch ((t (:family "iA Writer Mono S" :height 180 ))))
+	'(flyspell-incorrect ((t (:foreground "#d3ebe9" :background "#c23127"))))
+	'(header-line ((t (:background "#1c1e1f" :height 220))))
+	'(org-document-title        ((t (:foreground "#f2f2f2" :weight bold :height 400))))
+	'(org-meta-line             ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+	'(org-document-info         ((t (:foreground "#51c4b5"))))
+	'(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+	'(org-block                 ((t (:inherit fixed-pitch))))
+	'(org-link                  ((t (:foreground "royal blue" :underline t))))
+	'(org-property-value        ((t (:inherit fixed-pitch))) t)
+	'(org-special-keyword       ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+	'(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+	'(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
+	'(org-indent                ((t (:inherit (org-hide fixed-pitch)))))
+	'(org-level-1               ((t (:foreground "#ffaf69"))))
+	'(org-level-2               ((t (:foreground "#3fc6b7"))))
+	'(org-level-3               ((t (:foreground "#dc4d59"))))
+	'(org-list-dt               ((t (:foreground "#ea412b"))))
+	'(org-table                 ((t (:inherit fixed-pitch))) t)
+	'(org-ellipsis              ((t (:foreground "#51c4b5")))))
+
+
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; Writing Window Setup
+
+(defun write-window-setup ()
+(interactive)
+	(split-window-right)
+	(windmove-right)
+	(split-window-below)
+	(windmove-left)
+	(find-file "*draft.org" t)
+	(windmove-right)
+	(find-file "*notes.md" t)
+	(windmove-left))
+	
+(with-eval-after-load 'dired
+	(define-key dired-mode-map [f3] #'write-window-setup))
+
+
+;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
@@ -337,14 +570,36 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("a2cde79e4cc8dc9a03e7d9a42fabf8928720d420034b66aecc5b665bbf05d4e9" default)))
+    ("11e57648ab04915568e558b77541d0e94e69d09c9c54c06075938b6abc0189d8" "a2cde79e4cc8dc9a03e7d9a42fabf8928720d420034b66aecc5b665bbf05d4e9" default)))
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
    (quote
-    (zenburn-theme zen-and-art-theme yaml-mode white-sand-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme rebecca-theme rainbow-mode rainbow-identifiers railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme naquadah-theme mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme madhat2r-theme lush-theme light-soap-theme jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme farmhouse-theme exotica-theme espresso-theme emoji-cheat-sheet-plus ein skewer-mode polymode deferred websocket js2-mode simple-httpd dracula-theme dockerfile-mode docker json-mode tablist docker-tramp json-snatcher json-reformat django-theme disaster darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme csv-mode company-emoji company-c-headers company-auctex color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-identifiers-mode cmake-mode clues-theme clang-format cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme auctex-latexmk auctex apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme yapfify web-mode unfill tagedit smeargle slim-mode scss-mode sass-mode pyvenv pytest pyenv-mode py-isort pug-mode pip-requirements orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download mwim mmm-mode markdown-toc markdown-mode magit-gitflow magit-popup live-py-mode hy-mode dash-functional htmlize helm-pydoc helm-gitignore helm-css-scss helm-company helm-c-yasnippet haml-mode gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit transient git-commit with-editor emmet-mode diff-hl cython-mode company-web web-completion-data company-statistics company-anaconda company auto-yasnippet yasnippet auto-dictionary anaconda-mode pythonic ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile projectile pkg-info epl helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
+    (olivetti reveal-in-osx-finder pbcopy osx-trash osx-dictionary launchctl anaphora zenburn-theme zen-and-art-theme yaml-mode white-sand-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme rebecca-theme rainbow-mode rainbow-identifiers railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme naquadah-theme mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme madhat2r-theme lush-theme light-soap-theme jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme farmhouse-theme exotica-theme espresso-theme emoji-cheat-sheet-plus ein skewer-mode polymode deferred websocket js2-mode simple-httpd dracula-theme dockerfile-mode docker json-mode tablist docker-tramp json-snatcher json-reformat django-theme disaster darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme csv-mode company-emoji company-c-headers company-auctex color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-identifiers-mode cmake-mode clues-theme clang-format cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme auctex-latexmk auctex apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme yapfify web-mode unfill tagedit smeargle slim-mode scss-mode sass-mode pyvenv pytest pyenv-mode py-isort pug-mode pip-requirements orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download mwim mmm-mode markdown-toc markdown-mode magit-gitflow magit-popup live-py-mode hy-mode dash-functional htmlize helm-pydoc helm-gitignore helm-css-scss helm-company helm-c-yasnippet haml-mode gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit transient git-commit with-editor emmet-mode diff-hl cython-mode company-web web-completion-data company-statistics company-anaconda company auto-yasnippet yasnippet auto-dictionary anaconda-mode pythonic ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile projectile pkg-info epl helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((((class color) (min-colors 257)) (:foreground "#F8F8F2" :background "#272822")) (((class color) (min-colors 89)) (:foreground "#F5F5F5" :background "#1B1E1C"))))
+ '(fixed-pitch ((t (:family "iA Writer Mono S" :height 180))))
+ '(flyspell-incorrect ((t (:foreground "#d3ebe9" :background "#c23127"))))
+ '(header-line ((t (:background "#1c1e1f" :height 220))))
+ '(org-block ((t (:inherit fixed-pitch))))
+ '(org-document-info ((t (:foreground "#51c4b5"))))
+ '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+ '(org-document-title ((t (:foreground "#f2f2f2" :weight bold :height 400))))
+ '(org-ellipsis ((t (:foreground "#51c4b5"))))
+ '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+ '(org-level-1 ((t (:foreground "#ffaf69"))))
+ '(org-level-2 ((t (:foreground "#3fc6b7"))))
+ '(org-level-3 ((t (:foreground "#dc4d59"))))
+ '(org-link ((t (:foreground "royal blue" :underline t))))
+ '(org-list-dt ((t (:foreground "#ea412b"))))
+ '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+ '(org-property-value ((t (:inherit fixed-pitch))) t)
+ '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+ '(org-table ((t (:inherit fixed-pitch))) t)
+ '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+ '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
+ '(variable-pitch ((t (:family "iA Writer Mono S" :height 200 :foreground "#a5967e")))))
+;;'(variable-pitch ((t (:family "iA Writer Quattro S" :height 200 :foreground "#a5967e"))))
