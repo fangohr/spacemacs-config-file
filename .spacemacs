@@ -519,9 +519,9 @@ you should place your code here."
 
 (custom-theme-set-faces
 	'user
-	'(variable-pitch ((t (:family "Source Code Pro" :height 200 :foreground "#a5967e"))))
-	'(fixed-pitch ((t (:family "Source Code Pro" :height 180 ))))
-  ;'(fixed-pitch ((t (:family "Inconsolata" :height 180 ))))
+	'(variable-pitch ((t (:family "Inconsolata" :height 200 :foreground "#a5967e"))))
+	;'(fixed-pitch ((t (:family "Inconsolata" :height 180 ))))
+  '(fixed-pitch ((t (:family "Inconsolata" ))))
 	'(flyspell-incorrect ((t (:foreground "#d3ebe9" :background "#c23127"))))
 	'(header-line ((t (:background "#1c1e1f" :height 220))))
 	'(org-document-title        ((t (:foreground "#f2f2f2" :weight bold :height 400))))
