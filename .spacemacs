@@ -438,7 +438,7 @@ you should place your code here."
 	(interactive)
 	(visual-line-mode 1)
 	;; (setq buffer-face-mode-face '(:family "iA Writer Quattro S" :height 200 :foreground "#aba7a0"))
-  (setq buffer-face-mode-face '(:family "iA Writer Mono S" :height 180 ))
+  (setq buffer-face-mode-face '(:family "Inconsolata" :height 180 ))
 	(buffer-face-mode)
 	(setq line-spacing 3)
 	(setq left-margin-width 8)
@@ -510,15 +510,16 @@ you should place your code here."
 
 
 (defun my-org-config/setup-buffer-face ()
-	(setq buffer-face-mode-face '(:family "iA Writer Mono S"))
+	(setq buffer-face-mode-face '(:family "Inconsolata"))
 	(buffer-face-mode)
 )
 (add-hook 'org-agenda-mode-hook 'my-org-config/setup-buffer-face)
 
 (custom-theme-set-faces
 	'user
-	'(variable-pitch ((t (:family "iA Writer Mono S" :height 200 :foreground "#a5967e"))))
-	'(fixed-pitch ((t (:family "iA Writer Mono S" :height 180 ))))
+	'(variable-pitch ((t (:family "Source Code Pro" :height 200 :foreground "#a5967e"))))
+	'(fixed-pitch ((t (:family "Source Code Pro" :height 180 ))))
+  ;'(fixed-pitch ((t (:family "Inconsolata" :height 180 ))))
 	'(flyspell-incorrect ((t (:foreground "#d3ebe9" :background "#c23127"))))
 	'(header-line ((t (:background "#1c1e1f" :height 220))))
 	'(org-document-title        ((t (:foreground "#f2f2f2" :weight bold :height 400))))
