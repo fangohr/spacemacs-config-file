@@ -586,7 +586,7 @@ you should place your code here."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((((class color) (min-colors 257)) (:foreground "#F8F8F2" :background "#272822")) (((class color) (min-colors 89)) (:foreground "#F5F5F5" :background "#1B1E1C"))))
- '(fixed-pitch ((t (:family "iA Writer Mono S" :height 180))))
+ '(fixed-pitch ((t (:family "Inconsolata" :height 180))))
  '(flyspell-incorrect ((t (:foreground "#d3ebe9" :background "#c23127"))))
  '(header-line ((t (:background "#1c1e1f" :height 220))))
  '(org-block ((t (:inherit fixed-pitch))))
