@@ -325,6 +325,8 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
 
+    (setq-default git-magit-status-fullscreen t)
+    (global-git-commit-mode t)
   )
 
 (defun dotspacemacs/user-config ()
@@ -337,7 +339,7 @@ you should place your code here."
 
   (setq org-startup-indented t)
   (setq org-use-speed-commands t)
-
+  (global-set-key (kbd "C-x g") 'magit-status)
 
   ;; Many lines in the following taken from
   ;; https://github.com/frankjonen/emacs-for-writers/blob/master/.spacemacs
@@ -603,7 +605,7 @@ you should place your code here."
  '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
  '(org-property-value ((t (:inherit fixed-pitch))) t)
  '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
- '(org-table ((t (:inherit fixed-pitch))))
+ '(org-table ((t (:inherit fixed-pitch))) t)
  '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
  '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
  '(variable-pitch ((t (:family "Inconsolata" :height 200 :foreground "#a5967e")))))
