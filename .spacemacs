@@ -628,7 +628,7 @@ before packages are loaded."
 	(setq line-spacing 3)
 	(setq left-margin-width 8)
 	(setq right-margin-width 8)
-	(flyspell-mode 1)
+	(flyspell-mode 0)
 	(setq global-hl-line-mode nil)
 	(setq header-line-format " "))
 (add-hook 'markdown-mode-hook #'markdown-setup)
