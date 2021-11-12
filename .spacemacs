@@ -32,7 +32,7 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
+   '(rust
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -54,7 +54,6 @@ This function should only modify configuration layer settings."
      syntax-checking
      shell-scripts
      yaml
-     python
      html
      docker
      auto-completion
@@ -64,6 +63,7 @@ This function should only modify configuration layer settings."
      markdown
      org
      python
+     ;; should we 'pip install python-lsp-server'
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
@@ -73,7 +73,6 @@ This function should only modify configuration layer settings."
      emoji
      c-c++
      csv
-     ipython-notebook
      latex
      docker
      colors
@@ -106,7 +105,7 @@ This function should only modify configuration layer settings."
    ;; installs only the used packages but won't delete unused ones. `all'
    ;; installs *all* packages supported by Spacemacs and never uninstalls them.
    ;; (default is `used-only')
-   dotspacemacs-install-packages 'used-only))
+   dotspacemacs-install-packages 'used-but-keep-unused))
 
 (defun dotspacemacs/init ()
   "Initialization:
@@ -566,6 +565,8 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
     (setq-default git-magit-status-fullscreen t)
     ;; (global-git-commit-mode t)
     ;;(require 'ox-rst)
+    (setq default-frame-alist '((font . "Source Code Pro")))
+
   )
 
 
@@ -598,9 +599,16 @@ before packages are loaded."
   (with-eval-after-load "ispell"
     (setq ispell-program-name "aspell")
     (ispell-set-spellchecker-params)
-    (setq ispell-dictionary "en_GB"))
-  )
+    (setq ispell-dictionary "en_GB")
+    
+    )
+  
 
+;; from gitter: https://gitter.im/emacs-lsp/lsp-mode?at=5d08cdb7e527d95addfd7081
+;;  (add-hook 'fortran-mode-hook 'lsp)
+;;  (add-to-list 'lsp-language-id-configuration '(fortran-mode . "fortran"))
+
+  )
 
 
 
@@ -703,10 +711,11 @@ before packages are loaded."
 
 (custom-theme-set-faces
 	'user
-	'(variable-pitch ((t (:family "Inconsolata" :height 200 :foreground "#a5967e"))))
+	;'(variable-pitch ((t (:family "Inconsolata" :height 200 :foreground "#a5967e"))))
 	;'(fixed-pitch ((t (:family "Inconsolata" :height 180 ))))
   '(fixed-pitch ((t (:family "Inconsolata" ))))
-	'(flyspell-incorrect ((t (:foreground "#d3ebe9" :background "#c23127"))))
+	'(flyspell-incorrect ((t (:foreground "#c23127" :weight normal))))
+  ;;'(flyspell-incorrect ((t (:foreground "#d3ebe9" :background "#c23127"))))
 	'(header-line ((t (:background "#1c1e1f" :height 220))))
 	'(org-document-title        ((t (:foreground "#f2f2f2" :weight bold :height 400))))
 	'(org-meta-line             ((t (:inherit (font-lock-comment-face fixed-pitch)))))
@@ -762,13 +771,34 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
-   '(treemacs-magit smeargle orgit-forge orgit org-rich-yank org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-cliplink org-brain mmm-mode markdown-toc magit-section htmlize helm-org-rifle helm-gitignore helm-git-grep gnuplot gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md forge markdown-mode magit ghub closql emacsql-sqlite emacsql treepy git-commit with-editor transient flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip evil-org auto-dictionary ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired toc-org symon symbol-overlay string-inflection string-edit spaceline-all-the-icons restart-emacs request rainbow-delimiters quickrun popwin pcre2el password-generator paradox overseer org-superstar open-junk-file nameless multi-line macrostep lorem-ipsum link-hint indent-guide hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio font-lock+ flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav editorconfig dumb-jump drag-stuff dotenv-mode dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line)))
+   '(py-test pylint python python-docstring python-info python-isort python-mode python-pytest python-test pyvenv qrencode flymake-python-pyflakes python-black fortpy smart-mode-line toml-mode ron-mode racer rust-mode helm-gtags ggtags flycheck-rust dap-mode lsp-treemacs bui lsp-mode counsel-gtags counsel swiper ivy cargo treemacs-magit smeargle orgit-forge orgit org-rich-yank org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-cliplink org-brain mmm-mode markdown-toc magit-section htmlize helm-org-rifle helm-gitignore helm-git-grep gnuplot gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md forge markdown-mode magit ghub closql emacsql-sqlite emacsql treepy git-commit with-editor transient flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip evil-org auto-dictionary ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired toc-org symon symbol-overlay string-inflection string-edit spaceline-all-the-icons restart-emacs request rainbow-delimiters quickrun popwin pcre2el password-generator paradox overseer org-superstar open-junk-file nameless multi-line macrostep lorem-ipsum link-hint indent-guide hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio font-lock+ flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav editorconfig dumb-jump drag-stuff dotenv-mode dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(fixed-pitch ((t (:family "Inconsolata"))))
+ '(flyspell-incorrect ((t (:foreground "#c23127" :weight normal))))
+ '(header-line ((t (:background "#1c1e1f" :height 220))))
+ '(org-block ((t (:inherit fixed-pitch))))
+ '(org-document-info ((t (:foreground "#51c4b5"))))
+ '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+ '(org-document-title ((t (:foreground "#f2f2f2" :weight bold :height 400))))
+ '(org-ellipsis ((t (:foreground "#51c4b5"))))
+ '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+ '(org-level-1 ((t (:foreground "#ffaf69"))))
+ '(org-level-2 ((t (:foreground "#3fc6b7"))))
+ '(org-level-3 ((t (:foreground "#dc4d59"))))
+ '(org-link ((t (:foreground "royal blue" :underline t))))
+ '(org-list-dt ((t (:foreground "#ea412b"))))
+ '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+ '(org-property-value ((t (:inherit fixed-pitch))) t)
+ '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+ '(org-table ((t (:inherit fixed-pitch))) t)
+ '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+ '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
 )
