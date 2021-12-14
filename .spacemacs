@@ -32,14 +32,14 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(rust
+   '(
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      ;; auto-completion
-     ;; better-defaults
+     better-defaults
      emacs-lisp
      git
      helm
@@ -50,34 +50,10 @@ This function should only modify configuration layer settings."
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
-     spell-checking
-     syntax-checking
-     shell-scripts
-     yaml
-     html
-     docker
-     auto-completion
-     better-defaults
-     emacs-lisp
-     git
-     markdown
-     org
      python
-     ;; should we 'pip install python-lsp-server'
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
+     latex
      spell-checking
      syntax-checking
-     version-control
-     emoji
-     c-c++
-     csv
-     latex
-     docker
-     colors
-     themes-megapack
-     osx
      version-control
      treemacs)
 
@@ -105,7 +81,7 @@ This function should only modify configuration layer settings."
    ;; installs only the used packages but won't delete unused ones. `all'
    ;; installs *all* packages supported by Spacemacs and never uninstalls them.
    ;; (default is `used-only')
-   dotspacemacs-install-packages 'used-but-keep-unused))
+   dotspacemacs-install-packages 'used-only))
 
 (defun dotspacemacs/init ()
   "Initialization:
@@ -218,6 +194,9 @@ It should only modify the values of Spacemacs settings."
    ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
 
+   ;; Show numbers before the startup list lines. (default t)
+   dotspacemacs-show-startup-list-numbers t
+
    ;; The minimum delay in seconds between number key presses. (default 0.4)
    dotspacemacs-startup-buffer-multi-digit-delay 0.4
 
@@ -260,29 +239,14 @@ It should only modify the values of Spacemacs settings."
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
 
-   ;; ;; Default font or prioritized list of fonts. The `:size' can be specified as
-   ;; ;; a non-negative integer (pixel size), or a floating-point (point size).
-   ;; ;; Point size is recommended, because it's device independent. (default 10.0)
-   ;; dotspacemacs-default-font '("Source Code Pro"
-   ;;                             :size 10.0
-   ;;                             :weight normal
-   ;;                             :width normal)
-
-   dotspacemacs-themes '(cyberpunk
-                         molokai
-                         gotham
-                         spacemacs-dark)
-   ;; If non nil the cursor color matches the state color in GUI Emacs.
-   dotspacemacs-colorize-cursor-according-to-state t
-   ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
-   ;; quickly tweak the mode-line size to make separators look not too crappy.
+   ;; Default font or prioritized list of fonts. The `:size' can be specified as
+   ;; a non-negative integer (pixel size), or a floating-point (point size).
+   ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 20
-                               :weight light
-                               :width normal
-                               :powerline-scale 1.1)
+                               :size 10.0
+                               :weight normal
+                               :width normal)
 
-   
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
 
@@ -423,8 +387,8 @@ It should only modify the values of Spacemacs settings."
    ;; If set to `t', `relative' or `visual' then line numbers are enabled in all
    ;; `prog-mode' and `text-mode' derivatives. If set to `relative', line
    ;; numbers are relative. If set to `visual', line numbers are also relative,
-   ;; but lines are only visual lines are counted. For example, folded lines
-   ;; will not be counted and wrapped lines are counted as multiple lines.
+   ;; but only visual lines are counted. For example, folded lines will not be
+   ;; counted and wrapped lines are counted as multiple lines.
    ;; This variable can also be set to a property list for finer control:
    ;; '(:relative nil
    ;;   :visual nil
@@ -518,12 +482,15 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil)
    dotspacemacs-whitespace-cleanup nil
 
-   ;; If non nil activate `clean-aindent-mode' which tries to correct
-   ;; virtual indentation of simple modes. This can interfer with mode specific
+   ;; If non-nil activate `clean-aindent-mode' which tries to correct
+   ;; virtual indentation of simple modes. This can interfere with mode specific
    ;; indent handling like has been reported for `go-mode'.
    ;; If it does deactivate it here.
    ;; (default t)
    dotspacemacs-use-clean-aindent-mode t
+
+   ;; Accept SPC as y for prompts if non-nil. (default nil)
+   dotspacemacs-use-SPC-as-y nil
 
    ;; If non-nil shift your number row to match the entered keyboard layout
    ;; (only in insert state). Currently supported keyboard layouts are:
@@ -542,7 +509,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-pretty-docs nil
 
    ;; If nil the home buffer shows the full path of agenda items
-   ;; and todos. If non nil only the file name is shown.
+   ;; and todos. If non-nil only the file name is shown.
    dotspacemacs-home-shorten-agenda-source nil
 
    ;; If non-nil then byte-compile some of Spacemacs files.
@@ -561,13 +528,7 @@ See the header of this file for more information."
 This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
-If you are unsure, try setting them in `dotspacemacs/user-config' first."
-    (setq-default git-magit-status-fullscreen t)
-    ;; (global-git-commit-mode t)
-    ;;(require 'ox-rst)
-    (setq default-frame-alist '((font . "Source Code Pro")))
-
-  )
+If you are unsure, try setting them in `dotspacemacs/user-config' first.")
 
 
 (defun dotspacemacs/user-load ()
@@ -582,182 +543,7 @@ dump.")
 This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
-before packages are loaded."
-
-
-  (setq org-startup-indented t)
-  ;; (setq org-use-speed-commands t)
-  (global-set-key (kbd "C-x g") 'magit-status)
-
-  ;; Many lines in the following taken from
-  ;; https://github.com/frankjonen/emacs-for-writers/blob/master/.spacemacs
-
-  ;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  ;; Spellcheck Setup
-
-
-  (with-eval-after-load "ispell"
-    (setq ispell-program-name "aspell")
-    (ispell-set-spellchecker-params)
-    (setq ispell-dictionary "en_GB")
-    
-    )
-
-  ((setq magit-refresh-status-buffer nil) )
-
-;; from gitter: https://gitter.im/emacs-lsp/lsp-mode?at=5d08cdb7e527d95addfd7081
-;;  (add-hook 'fortran-mode-hook 'lsp)
-;;  (add-to-list 'lsp-language-id-configuration '(fortran-mode . "fortran"))
-
-  )
-
-
-
-;; Additional config from Hans
-
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;; Projectile
-
-(setq projectile-completion-system 'ivy)
-(setq projectile-ignore-global '(".DS_Store" ".gitmodules" ".gitignore"))
-;(setq projectile-project-search-path '("~/work/"))
-
-
-
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;; Markdown
-
-(defun markdown-setup ()
-	(interactive)
-	(visual-line-mode 1)
-	;; (setq buffer-face-mode-face '(:family "iA Writer Quattro S" :height 200 :foreground "#aba7a0"))
-  (setq buffer-face-mode-face '(:family "Inconsolata" ))
-  ;(setq buffer-face-mode-face '(:family "Inconsolata" :height 180 ))
-	(buffer-face-mode)
-	(setq line-spacing 3)
-	(setq left-margin-width 8)
-	(setq right-margin-width 8)
-	(flyspell-mode 0)
-	(setq global-hl-line-mode nil)
-	(setq header-line-format " "))
-(add-hook 'markdown-mode-hook #'markdown-setup)
-(add-hook 'markdown-mode-hook 'prettify-symbols-mode)
-;;(add-hook 'markdown-mode-hook 'fixed-pitch-mode)
-
-
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;; Org-Mode
-
-(defun split-and-indirect-orgtree ()
-"Splits window to the right and opens an org tree section in it"
-(interactive)
-(split-window-right)
-(org-tree-to-indirect-buffer)
-(windmove-right))
-
-
-(defun kill-and-unsplit-orgtree ()
-"Kills the cloned buffer and deletes the window."
-(interactive)
-(kill-this-buffer)
-(delete-window))
-
-
-(with-eval-after-load 'org
-	(setq org-agenda-files '("~/owncloud/mi/logbook/"))
-	;                         "~/Org/Agenda/"))
-	;(setq org-default-notes-file "~/Org/Notes/notes.org")
-	(setq org-ellipsis "⤵")
-	(setq org-catch-invisible-edits 'show-and-error)
-	(setq org-hide-emphasis-markers t)
-	(setq org-fontify-whole-heading-line t)
-	(setq org-tags-column 0)
-	(setq org-bullets-bullet-list '("⬢" "◆" "▲" "■"))
-	(setq org-adapt-indentation t)
-	(setq line-move-visual t)
-	; Change Default Keymaps
-	(define-key org-mode-map (kbd "C-S-<return>") 'org-insert-subheading)
-	; Shortcuts to Interactive Functions
-	(define-key org-mode-map [f9]  #'split-and-indirect-orgtree)
-	(define-key org-mode-map [f12] #'kill-and-unsplit-orgtree)
-	(define-key org-mode-map [f7]  #'org-html-export-to-html)
-  (define-key org-mode-map [f8]  #'org-rst-export-to-rst))
-
-
-; Things we can't set as defaults above, we can set here
-(defun org-setup ()
-	(setq line-spacing 3)
-	(flyspell-mode 1)
-	(setq global-hl-line-mode nil)
-	(set-fringe-mode 0)
-	(setq left-margin-width 5)
-	(setq right-margin-width 5)
-	(setq header-line-format " ")
-	(olivetti-mode 1))
-(add-hook 'org-mode-hook #'org-setup)
-
-;; The Hooks! Might be faster to set this as separate hooks instead of one big function
-;; (add-hook 'org-mode-hook 'variable-pitch-mode)
-;;(add-hook 'org-mode-hook 'fixed-pitch-mode)
-(add-hook 'org-mode-hook 'visual-line-mode)
-(add-hook 'org-mode-hook 'org-indent-mode)
-(add-hook 'org-mode-hook 'prettify-symbols-mode)
-
-
-(defun my-org-config/setup-buffer-face ()
-	(setq buffer-face-mode-face '(:family "Inconsolata"))
-	(buffer-face-mode)
-)
-(add-hook 'org-agenda-mode-hook 'my-org-config/setup-buffer-face)
-
-(custom-theme-set-faces
-	'user
-	;'(variable-pitch ((t (:family "Inconsolata" :height 200 :foreground "#a5967e"))))
-	;'(fixed-pitch ((t (:family "Inconsolata" :height 180 ))))
-  '(fixed-pitch ((t (:family "Inconsolata" ))))
-	'(flyspell-incorrect ((t (:foreground "#c23127" :weight normal))))
-  ;;'(flyspell-incorrect ((t (:foreground "#d3ebe9" :background "#c23127"))))
-	'(header-line ((t (:background "#1c1e1f" :height 220))))
-	'(org-document-title        ((t (:foreground "#f2f2f2" :weight bold :height 400))))
-	'(org-meta-line             ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-	'(org-document-info         ((t (:foreground "#51c4b5"))))
-	'(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-	'(org-block                 ((t (:inherit fixed-pitch))))
-	'(org-link                  ((t (:foreground "royal blue" :underline t))))
-	'(org-property-value        ((t (:inherit fixed-pitch))) t)
-	'(org-special-keyword       ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-	'(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
-	'(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
-	'(org-indent                ((t (:inherit (org-hide fixed-pitch)))))
-	'(org-level-1               ((t (:foreground "#ffaf69"))))
-	'(org-level-2               ((t (:foreground "#3fc6b7"))))
-	'(org-level-3               ((t (:foreground "#dc4d59"))))
-	'(org-list-dt               ((t (:foreground "#ea412b"))))
-	'(org-table                 ((t (:inherit fixed-pitch))) t)
-	'(org-ellipsis              ((t (:foreground "#51c4b5"))))
-	)
-
-
-
-
-
-
-
-
-;; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;; Terminal Environment
-
-(defun my-shell-setup ()
-	(interactive)
-	(setq buffer-face-mode-face '(:family "PxPlus IBM VGA8" :height 160))
-	(buffer-face-mode))
-(add-hook 'term-mode-hook #'my-shell-setup)
-
-
-
-
-
-
+before packages are loaded.")
 
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -773,34 +559,13 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
- '(evil-want-Y-yank-to-eol nil)
+   '("8f567db503a0d27202804f2ee51b4cd409eab5c4374f57640317b8fcbbd3e466" default))
  '(package-selected-packages
-   '(auctex-latexmk py-test pylint python python-docstring python-info python-isort python-mode python-pytest python-test pyvenv qrencode flymake-python-pyflakes python-black fortpy smart-mode-line toml-mode ron-mode racer rust-mode helm-gtags ggtags flycheck-rust dap-mode lsp-treemacs bui lsp-mode counsel-gtags counsel swiper ivy cargo treemacs-magit smeargle orgit-forge orgit org-rich-yank org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-cliplink org-brain mmm-mode markdown-toc magit-section htmlize helm-org-rifle helm-gitignore helm-git-grep gnuplot gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md forge markdown-mode magit ghub closql emacsql-sqlite emacsql treepy git-commit with-editor transient flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip evil-org auto-dictionary ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired toc-org symon symbol-overlay string-inflection string-edit spaceline-all-the-icons restart-emacs request rainbow-delimiters quickrun popwin pcre2el password-generator paradox overseer org-superstar open-junk-file nameless multi-line macrostep lorem-ipsum link-hint indent-guide hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio font-lock+ flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav editorconfig dumb-jump drag-stuff dotenv-mode dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line)))
+   '(treemacs-magit smeargle orgit-forge orgit helm-git-grep gitignore-templates git-timemachine git-modes git-messenger git-link forge yaml ghub closql emacsql-sqlite emacsql treepy magit yapfify sphinx-doc pytest pyenv-mode pydoc py-isort poetry transient pippel pipenv pyvenv pip-requirements nose live-py-mode importmagic epc ctable concurrent deferred helm-pydoc cython-mode blacken anaconda-mode pythonic molokai-theme math-symbol-lists auctex-latexmk auctex unfill org-rich-yank org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-contrib org-cliplink mwim mmm-mode markdown-toc markdown-mode htmlize helm-org-rifle gnuplot git-gutter-fringe fringe-helper git-gutter gh-md flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip evil-org browse-at-remote auto-dictionary ws-butler writeroom-mode visual-fill-column winum volatile-highlights vi-tilde-fringe uuidgen undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired treemacs cfrs pfuture posframe toc-org symon symbol-overlay string-inflection string-edit spaceline-all-the-icons memoize all-the-icons spaceline powerline restart-emacs request rainbow-delimiters quickrun popwin persp-mode password-generator paradox spinner overseer org-superstar open-junk-file nameless multi-line shut-up macrostep lorem-ipsum link-hint inspector info+ indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-org helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio flycheck-package package-lint flycheck pkg-info epl flycheck-elsa flx-ido flx fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired f evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-collection annalist evil-cleverparens smartparens evil-args evil-anzu anzu eval-sexp-fu emr iedit clang-format projectile paredit list-utils elisp-slime-nav editorconfig dumb-jump s drag-stuff dired-quick-sort define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol ht dash auto-compile packed aggressive-indent ace-window ace-link ace-jump-helm-line helm avy helm-core popup which-key use-package pcre2el hydra lv hybrid-mode font-lock+ evil goto-chg dotenv-mode diminish bind-map bind-key async)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:background nil))))
- '(fixed-pitch ((t (:family "Inconsolata"))))
- '(flyspell-incorrect ((t (:foreground "#c23127" :weight normal))))
- '(header-line ((t (:background "#1c1e1f" :height 220))))
- '(org-block ((t (:inherit fixed-pitch))))
- '(org-document-info ((t (:foreground "#51c4b5"))))
- '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
- '(org-document-title ((t (:foreground "#f2f2f2" :weight bold :height 400))))
- '(org-ellipsis ((t (:foreground "#51c4b5"))))
- '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
- '(org-level-1 ((t (:foreground "#ffaf69"))))
- '(org-level-2 ((t (:foreground "#3fc6b7"))))
- '(org-level-3 ((t (:foreground "#dc4d59"))))
- '(org-link ((t (:foreground "royal blue" :underline t))))
- '(org-list-dt ((t (:foreground "#ea412b"))))
- '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
- '(org-property-value ((t (:inherit fixed-pitch))) t)
- '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
- '(org-table ((t (:inherit fixed-pitch))))
- '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
- '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
+ )
 )
