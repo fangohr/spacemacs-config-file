@@ -32,13 +32,9 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
-     ;; ----------------------------------------------------------------
-     ;; Example of useful layers you may want to use right away.
-     ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
-     ;; `M-m f e R' (Emacs style) to install them.
-     ;; ----------------------------------------------------------------
-     ;; auto-completion
+   '(csv
+     yaml
+     rust
      better-defaults
      emacs-lisp
      git
@@ -52,11 +48,12 @@ This function should only modify configuration layer settings."
      ;;        shell-default-position 'bottom)
      python
      latex
+     rust
      spell-checking
      syntax-checking
      version-control
-     treemacs)
-
+     treemacs
+     docker)
 
    ;; List of additional packages that will be installed without being wrapped
    ;; in a layer (generally the packages are installed only and should still be
@@ -528,7 +525,9 @@ See the header of this file for more information."
 This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
-If you are unsure, try setting them in `dotspacemacs/user-config' first.")
+If you are unsure, try setting them in `dotspacemacs/user-config' first."
+  (setq-default git-magit-status-fullscreen t)
+  )
 
 
 (defun dotspacemacs/user-load ()
@@ -543,7 +542,11 @@ dump.")
 This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
-before packages are loaded.")
+before packages are loaded."
+
+  ;; based on https://github.com/syl20bnr/spacemacs/issues/9603#issuecomment-332128487
+(org-defkey org-mode-map [(meta return)] 'org-meta-return)
+  )
 
 
 ;; Do not write anything past this comment. This is where Emacs will
