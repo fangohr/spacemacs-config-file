@@ -40,9 +40,10 @@ This function should only modify configuration layer settings."
      emacs-lisp
      git
      helm
-     ;; lsp
+     lsp
      markdown
      multiple-cursors
+     projectile
      org
      ;; (shell :variables
      ;;        shell-default-height 30
@@ -54,7 +55,11 @@ This function should only modify configuration layer settings."
      syntax-checking
      version-control
      treemacs
-     docker)
+     ;;docker
+     ;;navigation
+     ;;visual
+     ;; modeline
+     )
 
    ;; List of additional packages that will be installed without being wrapped
    ;; in a layer (generally the packages are installed only and should still be
@@ -301,7 +306,7 @@ It should only modify the values of Spacemacs settings."
    ;; Size (in MB) above which spacemacs will prompt to open the large file
    ;; literally to avoid performance issues. Opening a file literally means that
    ;; no major mode or minor modes are active. (default is 1)
-   dotspacemacs-large-file-size 1
+   dotspacemacs-large-file-size 10
 
    ;; Location where to auto-save files. Possible values are `original' to
    ;; auto-save the file in-place, `cache' to auto-save the file to another
@@ -350,7 +355,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-maximized-at-startup t
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
    ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
@@ -541,7 +546,9 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   "Library to load while dumping.
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
-dump.")
+dump."
+  (require 'helm-mode)
+  )
 
 
 (defun dotspacemacs/user-config ()
@@ -571,7 +578,7 @@ This function is called at the very end of Spacemacs initialization."
  '(custom-safe-themes
    '("251ed7ecd97af314cd77b07359a09da12dcd97be35e3ab761d4a92d8d8cf9a71" "be84a2e5c70f991051d4aaf0f049fa11c172e5d784727e0b525565bb1533ec78" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" default))
  '(package-selected-packages
-   '(visual-regexp add-node-modules-path company-web web-completion-data counsel-css emmet-mode helm-css-scss impatient-mode simple-httpd prettier-js pug-mode sass-mode haml-mode scss-mode slim-mode tagedit web-beautify web-mode yasnippet doom-themes darkroom csv-mode yaml-mode toml-mode ron-mode racer rust-mode helm-gtags ggtags flycheck-rust dap-mode lsp-treemacs bui lsp-mode counsel-gtags counsel swiper ivy company cargo dockerfile-mode docker tablist json-mode docker-tramp json-snatcher yapfify ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package unfill undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired toc-org symon symbol-overlay string-inflection string-edit sphinx-doc spaceline-all-the-icons smeargle restart-emacs request rainbow-delimiters quickrun pytest pyenv-mode pydoc py-isort popwin poetry pippel pipenv pip-requirements pcre2el password-generator paradox overseer orgit-forge org-superstar org-rich-yank org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink open-junk-file nose nameless mwim multi-line mmm-mode math-symbol-lists markdown-toc macrostep lorem-ipsum live-py-mode link-hint inspector info+ indent-guide importmagic hybrid-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-ls-git helm-git-grep helm-flx helm-descbinds helm-ag google-translate golden-ratio gnuplot gitignore-templates git-timemachine git-modes git-messenger git-link git-gutter-fringe gh-md font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav editorconfig dumb-jump drag-stuff dotenv-mode dired-quick-sort diminish define-word cython-mode column-enforce-mode clean-aindent-mode centered-cursor-mode browse-at-remote blacken auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk anaconda-mode aggressive-indent ace-link ace-jump-helm-line)))
+   '(evil-easymotion treemacs-evil lsp-docker ac-ispell auto-complete auto-yasnippet code-cells company-anaconda company-auctex company-math company-reftex devdocs elisp-def evil-tex fuzzy helm-c-yasnippet helm-company helm-lsp help-fns+ hide-comnt lsp-latex lsp-origami origami lsp-pyright lsp-python-ms lsp-ui pylookup space-doc spacemacs-purpose-popwin spacemacs-whitespace-cleanup string-edit-at-point term-cursor yasnippet-snippets evil-evilified-state holy-mode visual-regexp-steroids visual-regexp add-node-modules-path company-web web-completion-data counsel-css emmet-mode helm-css-scss impatient-mode simple-httpd prettier-js pug-mode sass-mode haml-mode scss-mode slim-mode tagedit web-beautify web-mode yasnippet doom-themes darkroom csv-mode yaml-mode toml-mode ron-mode racer rust-mode helm-gtags ggtags flycheck-rust dap-mode lsp-treemacs bui lsp-mode counsel-gtags counsel swiper ivy company cargo dockerfile-mode docker tablist json-mode docker-tramp json-snatcher yapfify ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package unfill undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired toc-org symon symbol-overlay string-inflection string-edit sphinx-doc spaceline-all-the-icons smeargle restart-emacs request rainbow-delimiters quickrun pytest pyenv-mode pydoc py-isort popwin poetry pippel pipenv pip-requirements pcre2el password-generator paradox overseer orgit-forge org-superstar org-rich-yank org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink open-junk-file nose nameless mwim multi-line mmm-mode math-symbol-lists markdown-toc macrostep lorem-ipsum live-py-mode link-hint inspector info+ indent-guide importmagic hybrid-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-ls-git helm-git-grep helm-flx helm-descbinds helm-ag google-translate golden-ratio gnuplot gitignore-templates git-timemachine git-modes git-messenger git-link git-gutter-fringe gh-md font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav editorconfig dumb-jump drag-stuff dotenv-mode dired-quick-sort diminish define-word cython-mode column-enforce-mode clean-aindent-mode centered-cursor-mode browse-at-remote blacken auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk anaconda-mode aggressive-indent ace-link ace-jump-helm-line)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
