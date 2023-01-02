@@ -539,6 +539,12 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
   (setq-default git-magit-status-fullscreen t)
+  ;; https://gitter.im/syl20bnr/spacemacs?at=5a16be9b232e79134dc198a2
+  (with-eval-after-load 'python
+    (add-to-list 'python-shell-completion-native-disabled-interpreters "ipython"))
+  (when (executable-find "ipython")
+    (setq python-shell-interpreter "ipython")
+    (python-shell-completion-native-enable 'nil))
   )
 
 
