@@ -32,7 +32,8 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(html
+   '(javascript
+     html
      csv
      yaml
      rust
@@ -55,8 +56,16 @@ This function should only modify configuration layer settings."
      syntax-checking
      version-control
      treemacs
-     ;;docker
-     ;;navigation
+     ;; xkcd
+     ;; selectric
+     ;; osx
+     ;; spacemacs-visual
+     docker
+     ;; sphinx
+     ;;shell
+     ;; tmux
+     ;; themes-megapack
+     ;;navigation 
      ;;visual
      ;; modeline
      )
