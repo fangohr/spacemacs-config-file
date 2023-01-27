@@ -44,7 +44,6 @@ This function should only modify configuration layer settings."
      lsp
      markdown
      multiple-cursors
-     ;; projectile
      org
      ;; (shell :variables
      ;;        shell-default-height 30
@@ -524,7 +523,7 @@ It should only modify the values of Spacemacs settings."
    ;; Run `spacemacs/prettify-org-buffer' when
    ;; visiting README.org files of Spacemacs.
    ;; (default nil)
-   dotspacemacs-pretty-docs nil
+   dotspacemacs-pretty-docs t
 
    ;; If nil the home buffer shows the full path of agenda items
    ;; and todos. If non-nil only the file name is shown.
@@ -554,6 +553,11 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   (when (executable-find "ipython")
     (setq python-shell-interpreter "ipython")
     (python-shell-completion-native-enable 'nil))
+  ;; (spaceline-spacemacs-theme 'datetime)
+  (setq display-time-mode t) ;; show clock
+  (setq display-time-format "%H:%M")  ;; 24-h clock
+  (custom-set-variables '(display-time-mail-string ""))  ;; hide Mail in display-time area
+  (setq display-time-default-load-average nil) ;; supress display of CPU load
   )
 
 
@@ -574,7 +578,13 @@ Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
   ;; based on https://github.com/syl20bnr/spacemacs/issues/9603#issuecomment-332128487
-;;(org-defkey org-mode-map [(meta return)] 'org-meta-return)
+ ;; (org-defkey org-mode-map [(meta return)] 'org-meta-return)
+
+  ;; Suppress Python warning about guessing offset ()
+  ;; from https://stackoverflow.com/questions/18778894/emacs-24-3-python-cant-guess-python-indent-offset-using-defaults-4
+  (setq python-indent-guess-indent-offset t)  
+  (setq python-indent-guess-indent-offset-verbose nil)
+
   )
 
 
